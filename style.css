@@ -1,0 +1,26 @@
+#display {
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  background-color: #fcf8ec;
+}
+
+.numpad {
+  background-color: #b8bb26;
+}
+
+.clear {
+  background-color: #fb4934;
+}
+
+.operator {
+  background-color: #458588;
+}
+
+#container {
+  border-style: solid;
+  background-color: #928374;
+  width: 320px;
+  height: 450px;
+  margin: 0 auto;
+}

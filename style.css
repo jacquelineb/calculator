@@ -1,22 +1,29 @@
 #container {
   border-style: solid;
+  border-radius: 8px;
   background-color: #928374;
-  width: 320px;
-  height: 450px;
+  width: 260px;
+  height: 354px;
   margin: 0 auto;
+  padding: 5px;
 }
 
 #display {
   border-style: solid;
   border-color: black;
-  border-width: thin;
+  border-radius: 4px;
   background-color: #fcf8ec;
-  height: 50px;
+  height: 70px;
   text-align: right;
+  margin-bottom: 8px;
+  font-size: 32px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
 }
 
 .clear {
   background-color: #fb4934;
+  width: 93px;
 }
 
 .numpad {
@@ -25,5 +32,19 @@
 
 .operator, .equals {
   background-color: #458588;
+}
+
+button {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: black;
+  font-size: 23px;
+  width: 60px;
+  height: 50px;
+  margin: 1px;
+}
+
+.row {
+  margin-bottom: 2px;
 }
 

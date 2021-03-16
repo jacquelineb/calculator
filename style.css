@@ -4,7 +4,7 @@
   background-color: #928374;
   width: 260px;
   height: 354px;
-  margin: 0 auto;
+  margin: 100px auto;
   padding: 5px;
 }
 
@@ -16,8 +16,16 @@
   height: 70px;
   text-align: right;
   margin-bottom: 8px;
-  font-size: 32px;
   font-family: 'Courier New', Courier, monospace;
+}
+
+#mini-display {
+  margin: 0;
+}
+
+#main-display {
+  margin: 0;
+  font-size: 32px;
   font-weight: bold;
 }
 
@@ -42,6 +50,10 @@ button {
   width: 60px;
   height: 50px;
   margin: 1px;
+}
+
+button:focus {
+  border-color: #fcf8ec;
 }
 
 .row {

@@ -9,9 +9,8 @@ const expression = {
 
 // MAKE SURE TO LIMIT THE AMOUNT OF TEXT YOU CAN PUT INTO THE DISPLAY (MAYBE 9 CHARACTERS WIDE?)
 let currNum = '';
-let clearDisplay = false;
-const result = document.querySelector('#main-display');
-const expressionDisplay = document.querySelector('#mini-display');
+const expressionDisplay = document.querySelector('#expression');
+const resultDisplay = document.querySelector('#result');
 const clearBtn = document.querySelector('#clr');
 const deleteBtn = document.querySelector('#del');
 const numpadBtns = document.querySelectorAll('.numpad');
@@ -58,8 +57,8 @@ function divide(dividend, divisor) {
 }
 
 function deleteRecentInput() {
-  if (result.textContent !== '') {
-    result.textContent = '';
+  if (resultDisplay.textContent !== '') {
+    resultDisplay.textContent = '';
   }
 
   if (expression.num2.length) {
@@ -74,22 +73,19 @@ function deleteRecentInput() {
     expression.num1 = expression.num1.slice(0,-1);
     currNum = expression.num1;
   }
-  updateExpressionDisplay();
+  updateDisplay();
 
 }
 
 function clearData() {
   currNum = expression.num1 = expression.num2 = expression.operator = '';
-  expressionDisplay.textContent = result.textContent = '';
+  expressionDisplay.textContent = resultDisplay.textContent = '';
 }
 
 function evaluateExpression() {
-  if (!isNaN(expression.num1) && !isNaN(expression.num2) && expression.operator !== '') {
-    result.textContent = expression.evaluate();
+  if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
+    resultDisplay.textContent = expression.evaluate();
     currNum = expression.num1 = expression.num2 = expression.operator = '';
-
-    //expression.num1 = expression.num2 = expression.operator = '';
-    //currNum = result.textContent;
   }
 }
 
@@ -101,18 +97,13 @@ numpadBtns.forEach((button) => {
       return;
     }
 
-    if (result.textContent !== '') {
-      currNum = result.textContent = '';
-    }
-
     currNum += btnValue;
-    //expressionDisplay.textContent += btnValue;
     if (expression.operator === '') {
       expression.num1 = currNum;
     } else {
       expression.num2 = currNum;
     }
-    updateExpressionDisplay();
+    updateDisplay();
 
   });
 });
@@ -120,14 +111,13 @@ numpadBtns.forEach((button) => {
 operatorBtns.forEach((button) => {
   button.addEventListener('click', () => {
     const operator = button.getAttribute('value');
-    // Make sure to do something about the DIVIDE BY ZERO ERROR result
+    // Make sure to do something about the DIVIDE BY ZERO ERROR resultDisplay
 
-    if (result.textContent !== '' && !isNaN(result.textContent)) {
-      currNum = result.textContent;
-      result.textContent = '';
+    if (isValidNum(resultDisplay.textContent)) {
+      currNum = resultDisplay.textContent;
     }
 
-    if (currNum !== '' && !isNaN(currNum)) {
+    if (isValidNum(currNum)) {
       if (expression.operator === '') {
         expression.num1 = currNum;
         expression.operator = operator;
@@ -139,14 +129,17 @@ operatorBtns.forEach((button) => {
         expression.num2 = '';
       }
       currNum = ''
-      updateExpressionDisplay();
     }
-
+    updateDisplay();
   });
 });
 
+function isValidNum(string) {
+  return (string !== '' && !isNaN(string));
+}
 
-function updateExpressionDisplay() {
+function updateDisplay() {
   console.log(`${expression.num1} ${expression.operator} ${expression.num2}`);
   expressionDisplay.textContent = `${expression.num1} ${expression.operator} ${expression.num2}`;
+  resultDisplay.textContent = '';
 }

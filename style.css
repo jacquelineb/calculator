@@ -2,8 +2,8 @@
   border-style: solid;
   border-radius: 8px;
   background-color: #928374;
-  width: 260px;
-  height: 354px;
+  width: 300px;
+  height: 412px;
   margin: 100px auto;
   padding: 5px;
 }
@@ -15,23 +15,27 @@
   background-color: #fcf8ec;
   height: 70px;
   text-align: right;
-  margin-bottom: 8px;
-  font-family: 'Courier New', Courier, monospace;
+  padding: 5px;
+  font-family: 'Roboto', sans-serif;
 }
 
-#mini-display {
+#expression {
   margin: 0;
+  font-size: 20px;
 }
 
-#main-display {
+#result {
   margin: 0;
-  font-size: 32px;
-  font-weight: bold;
+  font-size: 36px;
+}
+
+#btns-wrapper {
+  padding-top: 5px;
 }
 
 .clear {
   background-color: #fb4934;
-  width: 93px;
+  width: 108px;
 }
 
 .numpad {
@@ -47,8 +51,8 @@ button {
   border-style: solid;
   border-color: black;
   font-size: 23px;
-  width: 60px;
-  height: 50px;
+  width: 70px;
+  height: 60px;
   margin: 1px;
 }
 

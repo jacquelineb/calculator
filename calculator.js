@@ -51,7 +51,7 @@ function multiply(num1, num2) {
 
 function divide(dividend, divisor) {
   if (divisor === 0) {
-    return 'ERROR: DIVIDE BY ZERO';
+    return 'UNDEFINED';
   }
   return dividend / divisor;
 }
@@ -85,6 +85,10 @@ function clearData() {
 function evaluateExpression() {
   if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
     resultDisplay.textContent = expression.evaluate();
+    if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
+      resultDisplay.textContent = parseFloat(resultDisplay.textContent).toPrecision(10);
+    }
+
     currNum = expression.num1 = expression.num2 = expression.operator = '';
   }
 }
@@ -97,32 +101,30 @@ numpadBtns.forEach((button) => {
       return;
     }
 
-    currNum += btnValue;
+    if (currNum.length < 17) {
+      currNum += btnValue;
+    }
     if (expression.operator === '') {
       expression.num1 = currNum;
     } else {
       expression.num2 = currNum;
     }
     updateDisplay();
-
   });
 });
 
 operatorBtns.forEach((button) => {
   button.addEventListener('click', () => {
-    const operator = button.getAttribute('value');
-    // Make sure to do something about the DIVIDE BY ZERO ERROR resultDisplay
-
     if (isValidNum(resultDisplay.textContent)) {
       currNum = resultDisplay.textContent;
     }
 
     if (isValidNum(currNum)) {
+      const operator = button.getAttribute('value');
       if (expression.operator === '') {
         expression.num1 = currNum;
         expression.operator = operator;
-      }
-      else {
+      } else {
         expression.num2 = currNum;
         expression.num1 = expression.evaluate();
         expression.operator = operator;

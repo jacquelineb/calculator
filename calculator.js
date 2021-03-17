@@ -9,11 +9,11 @@ const expression = {
 
 const numpadBtns = document.querySelectorAll('.numpad');
 const operatorBtns = document.querySelectorAll('.operator');
-const expressionDisplay = document.querySelector('#expression');
-const resultDisplay = document.querySelector('#result');
+const equalsBtn = document.querySelector('.equals');
 const clearBtn = document.querySelector('#clr');
 const deleteBtn = document.querySelector('#del');
-const equalsBtn = document.querySelector('.equals');
+const expressionDisplay = document.querySelector('#expression');
+const resultDisplay = document.querySelector('#result');
 
 numpadBtns.forEach((button) => {
   button.addEventListener('click', () => {
@@ -42,13 +42,19 @@ operatorBtns.forEach((button) => {
       expression.operator = operator;
       expression.num2 = '';
     }
-
     updateDisplay();
   });
 });
 
+equalsBtn.addEventListener('click', () => {
+  if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
+    evaluateExpression();
+    clearExpressionData();
+  }
+});
+
 clearBtn.addEventListener('click', () => {
-  clearData();
+  clearExpressionData();
   updateDisplay();
 });
 
@@ -57,7 +63,9 @@ deleteBtn.addEventListener('click', () => {
   updateDisplay();
 });
 
-equalsBtn.addEventListener('click', evaluateExpression);
+function isValidNum(string) {
+  return (string !== '' && !isNaN(string));
+}
 
 function updateDisplay() {
   console.log(`${expression.num1} ${expression.operator} ${expression.num2}`);
@@ -65,14 +73,18 @@ function updateDisplay() {
   resultDisplay.textContent = '';
 }
 
-function clearData() {
+function evaluateExpression() {
+  resultDisplay.textContent = expression.evaluate();
+  if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
+    resultDisplay.textContent = Number(resultDisplay.textContent).toPrecision(10);
+  }
+}
+
+function clearExpressionData() {
   expression.num1 = expression.num2 = expression.operator = '';
 }
 
 function deleteRecentInput() {
-  if (resultDisplay.textContent !== '') {
-    resultDisplay.textContent = '';
-  }
   if (expression.num2.length) {
     expression.num2 = expression.num2.slice(0,-1);
   } else if (expression.operator.length) {
@@ -82,23 +94,7 @@ function deleteRecentInput() {
   }
 }
 
-function evaluateExpression() {
-  if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
-    resultDisplay.textContent = expression.evaluate();
-    if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
-      resultDisplay.textContent = Number(resultDisplay.textContent).toPrecision(10);
-    }
-    expression.num1 = expression.num2 = expression.operator = '';
-  }
-}
-
-
-function isValidNum(string) {
-  return (string !== '' && !isNaN(string));
-}
-
 function operate(operator, num1, num2) {
-  console.log(`in operate(). num1: ${num1}, num2: ${num2}`);
   if (operator === '+') {
     return add(num1, num2);
   } else if (operator === '–') {

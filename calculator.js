@@ -7,20 +7,95 @@ const expression = {
   },
 };
 
-// MAKE SURE TO LIMIT THE AMOUNT OF TEXT YOU CAN PUT INTO THE DISPLAY (MAYBE 9 CHARACTERS WIDE?)
-let currNum = '';
+const numpadBtns = document.querySelectorAll('.numpad');
+const operatorBtns = document.querySelectorAll('.operator');
 const expressionDisplay = document.querySelector('#expression');
 const resultDisplay = document.querySelector('#result');
 const clearBtn = document.querySelector('#clr');
 const deleteBtn = document.querySelector('#del');
-const numpadBtns = document.querySelectorAll('.numpad');
-const operatorBtns = document.querySelectorAll('.operator');
 const equalsBtn = document.querySelector('.equals');
 
-clearBtn.addEventListener('click', clearData);
-deleteBtn.addEventListener('click', deleteRecentInput);
+numpadBtns.forEach((button) => {
+  button.addEventListener('click', () => {
+    const numpadChar = button.getAttribute('value');
+    let currOperandInput = (expression.operator === '') ? expression.num1 : expression.num2;
+    if (numpadChar === '-' && currOperandInput !== ''
+      || numpadChar === '.' && currOperandInput.includes('.')
+      || currOperandInput.length >= 17) {
+      return;
+    }
+    (expression.operator === '') ? expression.num1 += numpadChar : expression.num2 += numpadChar;
+    updateDisplay();
+  });
+});
+
+operatorBtns.forEach((button) => {
+  button.addEventListener('click', () => {
+    const operator = button.getAttribute('value');
+    if (isValidNum(resultDisplay.textContent)) {
+      expression.num1 = resultDisplay.textContent;
+    }
+    if (expression.operator === '' && isValidNum(expression.num1)) {
+      expression.operator = operator;
+    } else if (isValidNum(expression.num2)) {
+      expression.num1 = expression.evaluate();
+      expression.operator = operator;
+      expression.num2 = '';
+    }
+
+    updateDisplay();
+  });
+});
+
+clearBtn.addEventListener('click', () => {
+  clearData();
+  updateDisplay();
+});
+
+deleteBtn.addEventListener('click', () => {
+  deleteRecentInput();
+  updateDisplay();
+});
+
 equalsBtn.addEventListener('click', evaluateExpression);
 
+function updateDisplay() {
+  console.log(`${expression.num1} ${expression.operator} ${expression.num2}`);
+  expressionDisplay.textContent = `${expression.num1} ${expression.operator} ${expression.num2}`;
+  resultDisplay.textContent = '';
+}
+
+function clearData() {
+  expression.num1 = expression.num2 = expression.operator = '';
+}
+
+function deleteRecentInput() {
+  if (resultDisplay.textContent !== '') {
+    resultDisplay.textContent = '';
+  }
+  if (expression.num2.length) {
+    expression.num2 = expression.num2.slice(0,-1);
+  } else if (expression.operator.length) {
+    expression.operator = '';
+  } else if (expression.num1.length) {
+    expression.num1 = expression.num1.slice(0,-1);
+  }
+}
+
+function evaluateExpression() {
+  if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
+    resultDisplay.textContent = expression.evaluate();
+    if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
+      resultDisplay.textContent = Number(resultDisplay.textContent).toPrecision(10);
+    }
+    expression.num1 = expression.num2 = expression.operator = '';
+  }
+}
+
+
+function isValidNum(string) {
+  return (string !== '' && !isNaN(string));
+}
 
 function operate(operator, num1, num2) {
   console.log(`in operate(). num1: ${num1}, num2: ${num2}`);
@@ -54,94 +129,4 @@ function divide(dividend, divisor) {
     return 'UNDEFINED';
   }
   return dividend / divisor;
-}
-
-function deleteRecentInput() {
-  if (resultDisplay.textContent !== '') {
-    resultDisplay.textContent = '';
-  }
-
-  if (expression.num2.length) {
-    expression.num2 = expression.num2.slice(0,-1);
-    currNum = expression.num2;
-  }
-  else if (expression.operator.length) {
-    expression.operator = '';
-    currNum = expression.num1;
-  }
-  else if (expression.num1.length) {
-    expression.num1 = expression.num1.slice(0,-1);
-    currNum = expression.num1;
-  }
-  updateDisplay();
-
-}
-
-function clearData() {
-  currNum = expression.num1 = expression.num2 = expression.operator = '';
-  expressionDisplay.textContent = resultDisplay.textContent = '';
-}
-
-function evaluateExpression() {
-  if (isValidNum(expression.num1) && isValidNum(expression.num2) && expression.operator !== '') {
-    resultDisplay.textContent = expression.evaluate();
-    if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
-      resultDisplay.textContent = parseFloat(resultDisplay.textContent).toPrecision(10);
-    }
-
-    currNum = expression.num1 = expression.num2 = expression.operator = '';
-  }
-}
-
-numpadBtns.forEach((button) => {
-  button.addEventListener('click', () => {
-    const btnValue = button.getAttribute('value');
-    if (btnValue === '-' && currNum !== ''
-      || btnValue === '.' && currNum.includes('.')) {
-      return;
-    }
-
-    if (currNum.length < 17) {
-      currNum += btnValue;
-    }
-    if (expression.operator === '') {
-      expression.num1 = currNum;
-    } else {
-      expression.num2 = currNum;
-    }
-    updateDisplay();
-  });
-});
-
-operatorBtns.forEach((button) => {
-  button.addEventListener('click', () => {
-    if (isValidNum(resultDisplay.textContent)) {
-      currNum = resultDisplay.textContent;
-    }
-
-    if (isValidNum(currNum)) {
-      const operator = button.getAttribute('value');
-      if (expression.operator === '') {
-        expression.num1 = currNum;
-        expression.operator = operator;
-      } else {
-        expression.num2 = currNum;
-        expression.num1 = expression.evaluate();
-        expression.operator = operator;
-        expression.num2 = '';
-      }
-      currNum = ''
-    }
-    updateDisplay();
-  });
-});
-
-function isValidNum(string) {
-  return (string !== '' && !isNaN(string));
-}
-
-function updateDisplay() {
-  console.log(`${expression.num1} ${expression.operator} ${expression.num2}`);
-  expressionDisplay.textContent = `${expression.num1} ${expression.operator} ${expression.num2}`;
-  resultDisplay.textContent = '';
 }

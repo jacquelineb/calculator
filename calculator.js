@@ -15,6 +15,8 @@ const deleteBtn = document.querySelector('#del');
 const expressionDisplay = document.querySelector('#expression');
 const resultDisplay = document.querySelector('#result');
 
+window.addEventListener('keydown', simulateButtonClick);
+
 numpadBtns.forEach((button) => {
   button.addEventListener('click', () => {
     const numpadChar = button.getAttribute('value');
@@ -63,12 +65,19 @@ deleteBtn.addEventListener('click', () => {
   updateDisplay();
 });
 
+function simulateButtonClick(e) {
+  const button = document.querySelector(`button[data-key="${e.key}"]`);
+  if (button) {
+    button.focus();
+    button.click();
+  }
+}
+
 function isValidNum(string) {
   return (string !== '' && !isNaN(string));
 }
 
 function updateDisplay() {
-  console.log(`${expression.num1} ${expression.operator} ${expression.num2}`);
   expressionDisplay.textContent = `${expression.num1} ${expression.operator} ${expression.num2}`;
   resultDisplay.textContent = '';
 }

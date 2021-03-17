@@ -14,9 +14,9 @@
   border-radius: 4px;
   background-color: #fcf8ec;
   height: 80px;
-  text-align: right;
   padding: 5px;
   font-family: 'Roboto', sans-serif;
+  text-align: right;
 }
 
 #expression {
@@ -33,19 +33,6 @@
   padding-top: 5px;
 }
 
-.clear {
-  background-color: #fb4934;
-  width: 108px;
-}
-
-.numpad {
-  background-color: #b8bb26;
-}
-
-.operator, .equals {
-  background-color: #458588;
-}
-
 button {
   border-radius: 4px;
   border-style: solid;
@@ -60,7 +47,19 @@ button:focus {
   border-color: #fcf8ec;
 }
 
+.clear {
+  background-color: #fb4934;
+  width: 108px;
+}
+
+.numpad {
+  background-color: #b8bb26;
+}
+
+.operator, .equals {
+  background-color: #458588;
+}
+
 .row {
   margin-bottom: 2px;
 }
-

@@ -2,9 +2,6 @@ const expression = {
   num1: '',
   num2: '',
   operator: '',
-  evaluate: function() {
-    return operate(this.operator, Number(this.num1), Number(this.num2)).toString();
-  },
 };
 
 const numpadBtns = document.querySelectorAll('.numpad');
@@ -40,7 +37,7 @@ operatorBtns.forEach((button) => {
     if (expression.operator === '' && isValidNum(expression.num1)) {
       expression.operator = operator;
     } else if (isValidNum(expression.num2)) {
-      expression.num1 = expression.evaluate();
+      expression.num1 = operate(expression.operator, Number(expression.num1), Number(expression.num2)).toString();
       expression.operator = operator;
       expression.num2 = '';
     }
@@ -83,7 +80,7 @@ function updateDisplay() {
 }
 
 function evaluateExpression() {
-  resultDisplay.textContent = expression.evaluate();
+  resultDisplay.textContent = operate(expression.operator, Number(expression.num1), Number(expression.num2)).toString();
   if (isValidNum(resultDisplay.textContent) && resultDisplay.textContent.length > 10) {
     resultDisplay.textContent = Number(resultDisplay.textContent).toPrecision(10);
   }
